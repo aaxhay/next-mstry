@@ -17,12 +17,14 @@ export const sendVerificationEmail = async (
     return {
       success: true,
       message: "Verification email sent successfully",
+      status : 200
     };
   } catch (error) {
     console.log("Error sending verification email: ", error);
     return {
       success: false,
       message: "Error while sending Verification email",
+      status : 500
     };
   }
 };
