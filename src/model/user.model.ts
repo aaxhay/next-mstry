@@ -1,6 +1,4 @@
-import { match } from "assert";
 import mongoose, { Schema, Document } from "mongoose";
-import { unique } from "next/dist/build/utils";
 
 export interface message extends Document {
   content: string;
@@ -33,7 +31,7 @@ export interface user extends Document {
   messages: message[];
 }
 
-const userSchema = new Schema({
+const userSchema: Schema<user> = new Schema({
   username: {
     type: String,
     required: true,
