@@ -1,9 +1,8 @@
-import React from 'react'
+"use client";
+import { signIn } from "next-auth/react";
 
 const page = () => {
-  return (
-    <div>page</div>
-  )
-}
+  return <button onClick={() => signIn()}>Sign In</button>
+};
 
-export default page
+export default page;
