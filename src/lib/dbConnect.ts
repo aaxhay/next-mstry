@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 type ConnectionObject = {
-  isConnected?: Number;
+  isConnected?: number;
   databaseHost?: string;
 };
 
@@ -14,14 +14,15 @@ const dbConnect = async () : Promise<void> => {
   }
 
   try {
-    const db = await mongoose.connect(process.env.MONGODB_URI || "");
+    // console.log(process.env.MONGODB_URI)
+    const db = await mongoose.connect(`${process.env.MONGODB_URI}/app`|| "");
 
     connection.isConnected = db.connections[0].readyState;
     connection.databaseHost = db.connections[0].host;
 
     console.log("Database is connected successfully");
   } catch (error) {
-    console.log("Error while connecting to Database ", error);
+    console.log("Error while connecting to Database", error);
 
     process.exit(1);
   }

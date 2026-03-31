@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { User } from "@/model/user.model";
 
 
-export const POST = async (request: Request): Promise<ApiResponse> => {
+export const POST = async (request: Request): Promise<Response> => {
   await dbConnect();
   try {
     const { username, email, password } = await request.json();
@@ -21,11 +21,10 @@ export const POST = async (request: Request): Promise<ApiResponse> => {
 
     if (foundUserByUsernameAndVerified) {
       console.log("User already Exist");
-      return {
-        status: 400,
+      return Response.json({
         message: "User already exists with this username",
         success: false,
-      };
+      })
     }
 
     const userWithEmail = await User.findOne({ email });
@@ -34,11 +33,10 @@ export const POST = async (request: Request): Promise<ApiResponse> => {
     if (userWithEmail) {
       // checking if userWithEmail is verified === true
       if (userWithEmail.isVerified) {
-        return {
-          status: 400,
+        return Response.json({
           message: "User already exist with this email",
           success: false,
-        };
+        },{status:400})
       } else {
 
         //userWithEmail is not verified yet
@@ -72,34 +70,30 @@ export const POST = async (request: Request): Promise<ApiResponse> => {
       await createdUser.save();
 
       if (createdUser) {
-        return {
+        return Response.json({
           message: "User Created Successfully",
-          status: 201,
           success: true,
-        };
+        });
       }
     }
 
     const emailResponse = await sendVerificationEmail(username, email, otp);
 
     if (!emailResponse.success) {
-      return {
-        status: 500,
+      return Response.json({
         message: "failed to send the email",
         success: false,
-      };
+      });
     }
 
-    return {
+    return Response.json({
       success: true,
       message: "User Created Successfully || Signed Up Successfully",
-      status: 200,
-    };
+    });
   } catch (error) {
-    return {
-      status: 500,
+    return Response.json({
       success: false,
       message: "Failed to Create a user",
-    };
+    });
   }
 };
