@@ -1,4 +1,3 @@
-import { ApiResponse } from "@/types/ApiResponse";
 import { dbConnect } from "@/lib/dbConnect";
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 import bcrypt from "bcryptjs";
@@ -37,17 +36,17 @@ export const POST = async (request: Request): Promise<Response> => {
           message: "User already exist with this email",
           success: false,
         },{status:400})
-      } else {
+      } 
+      // else {
+      //   //userWithEmail is not verified yet
+      //   const hashedPassword = await bcrypt.hash(password, 10);
 
-        //userWithEmail is not verified yet
-        const hashedPassword = await bcrypt.hash(password, 10);
+      //   userWithEmail.password = hashedPassword;
+      //   userWithEmail.verifyToken = otp.toString();
+      //   userWithEmail.verifyTokenExpiry = new Date(Date.now() + 3600000);
 
-        userWithEmail.password = hashedPassword;
-        userWithEmail.verifyToken = otp;
-        userWithEmail.verifyTokenExpiry = new Date(Date.now() + 3600000);
-
-        await userWithEmail.save();
-      }
+      //   await userWithEmail.save();
+      // }
     } else {
       // new user
 
@@ -61,7 +60,7 @@ export const POST = async (request: Request): Promise<Response> => {
         email,
         password: hashedPassword,
         isAcceptingMessages: true,
-        verifyToken: otp,
+        verifyToken: otp.toString(),
         verifyTokenExpiry: expiryTime,
         isVerified: false,
         messages: [],
