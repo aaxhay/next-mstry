@@ -2,7 +2,7 @@ import { dbConnect } from "@/lib/dbConnect";
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 import bcrypt from "bcryptjs";
 import { User } from "@/model/user.model";
-
+import { log } from "console";
 
 export const POST = async (request: Request): Promise<Response> => {
   await dbConnect();
@@ -23,30 +23,33 @@ export const POST = async (request: Request): Promise<Response> => {
       return Response.json({
         message: "User already exists with this username",
         success: false,
-      })
+      });
     }
 
     const userWithEmail = await User.findOne({ email });
-    
+
     // if we found user with this email
     if (userWithEmail) {
       // checking if userWithEmail is verified === true
       if (userWithEmail.isVerified) {
-        return Response.json({
-          message: "User already exist with this email",
-          success: false,
-        },{status:400})
-      } 
-      // else {
-      //   //userWithEmail is not verified yet
-      //   const hashedPassword = await bcrypt.hash(password, 10);
+        return Response.json(
+          {
+            message: "User already exist with this email",
+            success: false,
+          },
+          { status: 400 },
+        );
+      }
+      else {
+        //userWithEmail is not verified yet
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-      //   userWithEmail.password = hashedPassword;
-      //   userWithEmail.verifyToken = otp.toString();
-      //   userWithEmail.verifyTokenExpiry = new Date(Date.now() + 3600000);
+        userWithEmail.password = hashedPassword;
+        userWithEmail.verifyToken = otp.toString();
+        userWithEmail.verifyTokenExpiry = new Date(Date.now() + 3600000);
 
-      //   await userWithEmail.save();
-      // }
+        await userWithEmail.save();
+      }
     } else {
       // new user
 
@@ -69,16 +72,13 @@ export const POST = async (request: Request): Promise<Response> => {
       await createdUser.save();
 
       if (createdUser) {
-        return Response.json({
-          message: "User Created Successfully",
-          success: true,
-        });
+        console.log("user created successfully");
       }
     }
 
     const emailResponse = await sendVerificationEmail(username, email, otp);
 
-    if (!emailResponse.success) {
+    if (!emailResponse) {
       return Response.json({
         message: "failed to send the email",
         success: false,
@@ -92,7 +92,7 @@ export const POST = async (request: Request): Promise<Response> => {
   } catch (error) {
     return Response.json({
       success: false,
-      message: "Failed to Create a user",
+      message: `Failed to Create a user : ${error}`,
     });
   }
 };
