@@ -47,7 +47,7 @@ export const EmailTemplate = ({ username, otp }: EmailTemplateProps) => {
 
               {/* OTP Box */}
               <Section className="bg-gray-100 rounded-xl py-4 mb-6">
-                <Text className="text-3xl font-bold tracking-widest text-indigo-600 m-0">
+                <Text className="text-3xl font-bold tracking-widest text-emerald-600 m-0">
                   {otp}
                 </Text>
               </Section>

@@ -1,5 +1,5 @@
 import { dbConnect } from "@/lib/dbConnect";
-import { User } from "@/model/user.model";
+import { userModel } from "@/model/user.model";
 import { signUpSchema } from "@/schemas/signUpSchema";
 import { NextResponse } from "next/server";
 
@@ -30,7 +30,7 @@ export const POST = async (request: Request) => {
 
     const { username } = response.data;
 
-    const existingUser = await User.findOne({ username, isVerified: true });
+    const existingUser = await userModel.findOne({ username, isVerified: true });
 
     if (existingUser) {
       return NextResponse.json(

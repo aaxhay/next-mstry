@@ -1,5 +1,5 @@
 import { dbConnect } from "@/lib/dbConnect";
-import { User } from "@/model/user.model";
+import { userModel } from "@/model/user.model";
 import { verifyTokenSchema } from "@/schemas/verifyTokenSchema";
 import { NextResponse } from "next/server";
 
@@ -116,7 +116,7 @@ export const POST = async (request: Request) => {
       );
     }
 
-    const existingUser = await User.findOne({
+    const existingUser = await userModel.findOne({
       username,
       isVerified: false,
     });    

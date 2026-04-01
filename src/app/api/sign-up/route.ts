@@ -1,15 +1,14 @@
 import { dbConnect } from "@/lib/dbConnect";
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 import bcrypt from "bcryptjs";
-import { User } from "@/model/user.model";
-import { log } from "console";
+import { userModel } from "@/model/user.model"
 
 export const POST = async (request: Request): Promise<Response> => {
   await dbConnect();
   try {
     const { username, email, password } = await request.json();
 
-    const foundUserByUsernameAndVerified = await User.findOne({
+    const foundUserByUsernameAndVerified = await userModel.findOne({
       username,
       isVerified: true,
     });
@@ -26,7 +25,7 @@ export const POST = async (request: Request): Promise<Response> => {
       });
     }
 
-    const userWithEmail = await User.findOne({ email });
+    const userWithEmail = await userModel.findOne({ email });
 
     // if we found user with this email
     if (userWithEmail) {
@@ -58,7 +57,7 @@ export const POST = async (request: Request): Promise<Response> => {
       const expiryTime = new Date();
       expiryTime.setHours(expiryTime.getHours() + 1);
 
-      const createdUser = await User.create({
+      const createdUser = await userModel.create({
         username,
         email,
         password: hashedPassword,
