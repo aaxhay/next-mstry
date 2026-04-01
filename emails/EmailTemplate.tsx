@@ -25,7 +25,7 @@ export const EmailTemplate = ({ username, otp }: EmailTemplateProps) => {
         <Body className="bg-gray-100 py-10 px-4 font-sans">
           <Container className="max-w-md mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
             {/* Header */}
-            <Section className="bg-indigo-600 text-white text-center py-6">
+            <Section className="bg-emerald-600 text-white text-center py-6">
               <Heading className="text-2xl font-bold m-0">
                 Verify Your Account 🔐
               </Heading>
